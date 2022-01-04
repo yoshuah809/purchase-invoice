@@ -32,9 +32,9 @@
             {% else %}    
                 <table class = "table table-stripped table-hover"> 
                     <thead>
-                        <th>ID</th>
-                        <th>Description</th>
-                        <th>Active</th>
+                    <th>ID</th>
+                    <th>Description</th>
+                    <th>Active</th>
                     <th>Date Created</th>
                     <th>Date Modified</th>
                     <th class="all">Actions</th>
@@ -43,12 +43,12 @@
                     <tbody>
                         {% for item in obj %}
                         <td>{{ item.id }}</td>
-                        <td>{{item.description }}</td>
-                        <td>{{ item.state }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>{{ item.is_active|yesno:"Yes,No" }}</td>
                         <td>{{ item.date_created|date:"m/d/Y H:i:s" }}</td>
                         <td>{{ item.date_modified }}</td>
                         <td >
-                            <a href="#" class="btn btn-warning btn-circle" role="button"><i class="far fa-edit"></i> </a>
+                            <a href="{% url 'inv:edit_category' item.id %}" class="btn btn-warning btn-circle" role="button"><i class="far fa-edit"></i> </a>
                             <a href="#" class="btn btn-danger btn-circle" role="button"><i class="far fa-trash-alt"></i> </a>
                         </td>
                         {% endfor %}
@@ -64,5 +64,11 @@
 {% endblock %}
 
 {% block js_page %}
+<script>
+$(document).ready(function() {
+    $('.table').DataTable();
+});
+
+</script>
 
 {% endblock %}

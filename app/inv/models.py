@@ -11,4 +11,4 @@ class Category(ModelClass):
 
     def save(self):
         self.description = self.description.upper()    
-        super(Category, self)
+        super(Category, self).save()
