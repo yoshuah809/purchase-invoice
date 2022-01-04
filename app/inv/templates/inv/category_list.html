@@ -1,0 +1,68 @@
+{% extends 'base/home.html' %}
+
+{% block page_content %}
+
+
+
+    <!-- Dropdown Card Example -->
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div
+            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Category List</h6>
+            <div class="dropdown no-arrow">
+                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                    aria-labelledby="dropdownMenuLink">
+                    <div class="dropdown-header">Actions:</div>
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </div>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+            {% if not obj %}
+                <div class=" alert alert-info"> There is no Categories</div>
+            {% else %}    
+                <table class = "table table-stripped table-hover"> 
+                    <thead>
+                        <th>ID</th>
+                        <th>Description</th>
+                        <th>State</th>
+                    <th>Date Created</th>
+                    <th>Date Modified</th>
+                    <th class="all">Actions</th>
+                    </thead>
+                
+                    <tbody>
+                        {% for item in obj %}
+                        <td>{{ item.id }}</td>
+                        <td>{{item.description }}</td>
+                        <td>{{ item.state }}</td>
+                        <td>{{ item.date_created|date:"m/d/Y H:i:s" }}</td>
+                        <td>{{ item.date_modified }}</td>
+                        <td >
+                            <a href="#" class="btn btn-warning btn circle" role="button"><i class="far fa-edit"></i> </a>
+                            <a href="#" class="btn btn-warning btn circle" role="button"><i class="far fa-trash-alt"></i> </a>
+                        </td>
+                        {% endfor %}
+                    </tbody>
+                
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+                           
+
+{% endblock %}
+
+{% block js_page %}
+
+{% endblock %}
