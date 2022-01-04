@@ -18,7 +18,7 @@
                 <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                     aria-labelledby="dropdownMenuLink">
                     <div class="dropdown-header">Actions:</div>
-                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="{% url 'inv:new_category' %}"><i class='far fa-calendar-plus'></i> New </a>
                     <a class="dropdown-item" href="#">Another action</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Something else here</a>
@@ -34,7 +34,7 @@
                     <thead>
                         <th>ID</th>
                         <th>Description</th>
-                        <th>State</th>
+                        <th>Active</th>
                     <th>Date Created</th>
                     <th>Date Modified</th>
                     <th class="all">Actions</th>
@@ -48,8 +48,8 @@
                         <td>{{ item.date_created|date:"m/d/Y H:i:s" }}</td>
                         <td>{{ item.date_modified }}</td>
                         <td >
-                            <a href="#" class="btn btn-warning btn circle" role="button"><i class="far fa-edit"></i> </a>
-                            <a href="#" class="btn btn-warning btn circle" role="button"><i class="far fa-trash-alt"></i> </a>
+                            <a href="#" class="btn btn-warning btn-circle" role="button"><i class="far fa-edit"></i> </a>
+                            <a href="#" class="btn btn-danger btn-circle" role="button"><i class="far fa-trash-alt"></i> </a>
                         </td>
                         {% endfor %}
                     </tbody>
