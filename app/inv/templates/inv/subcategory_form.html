@@ -1,0 +1,71 @@
+{% extends 'base/home.html' %}
+
+{% block page_content %}
+<form method="POST" class="form-inline">
+    {% csrf_token %}
+    <div class="col-xl-12 col-md-12 mb-12">
+
+        {% if obj %}
+        <div class="card border-left-warning shadow h-100 py-2">
+        {% else %}
+        <div class="card border-left-success shadow h-100 py-2">
+        {% endif %}
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            {% if obj %} Edit  {% else %} New  {% endif %} SubCategory</div>
+                        </div>
+
+                        <div class="dropdown-divider"></div>
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="input-group">
+                                   {{ form.category }}
+                                </div>
+                            </div> 
+                            <div class="col-5">
+                                <div class="input-group"> {{ form.description }} </div>
+                            </div> 
+
+                                <div class="col-2">
+                                    <div class="input-group"> {{ form.is_active }} {{"   "}}  </div>
+                                </div>  
+                                {{" "}}   
+                                    <!-- {{ form.as_p }} -->
+
+                                <div class="dropdown-divider"></div>
+                                <div class="row">
+                                    <div class="col">
+                                        <button type="submit" class="btn btn-danger" ><span class="fa fa-save">Save</span></button> 
+                                        &nbsp;&nbsp; {{" "}}
+                                        <a href="{% url 'inv:subcategory_list' %}" class="btn btn-success"><span class="fa fa-undo">Cancel</span></a>
+        
+                                    </div>
+                                </div> 
+
+
+                        </div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        
+                        <!-- <div class="dropdown-divider"></div>
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" class="btn btn-danger" ><span class="fa fa-save">Save</span></button> 
+                                &nbsp;&nbsp; {{" "}}
+                                <a href="{% url 'inv:subcategory_list' %}" class="btn btn-success"><span class="fa fa-undo">Cancel</span></a>
+
+                            </div>
+                        </div>      -->
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+                        
+
+{% endblock %}
+
+{% block js_page %}
+
+{% endblock %}

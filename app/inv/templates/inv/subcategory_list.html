@@ -9,7 +9,7 @@
         <!-- Card Header - Dropdown -->
         <div
             class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Category List</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Sub-Category List</h6>
             <div class="dropdown no-arrow">
                 <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -18,20 +18,19 @@
                 <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                     aria-labelledby="dropdownMenuLink">
                     <div class="dropdown-header">Actions:</div>
-                    <a class="dropdown-item" href="{% url 'inv:new_category' %}"><i class='far fa-calendar-plus'></i> New </a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <a class="dropdown-item" href="{% url 'inv:new_subcategory' %}"><i class='far fa-calendar-plus'></i> New </a>
+                   
                 </div>
             </div>
         </div>
         <!-- Card Body -->
         <div class="card-body">
             {% if not obj %}
-                <div class=" alert alert-info"> There is no Categories</div>
+                <div class=" alert alert-info"> There is no Sub Categories</div>
             {% else %}    
                 <table class="table table-active table-hover"> 
                     <thead>
+                    <th>Category</th>
                     <th>ID</th>
                     <th>Description</th>
                     <th>Active</th>
@@ -43,6 +42,7 @@
                     <tbody>
                         {% for item in obj %}
                         </tr>
+                            <td>{{ item.category }}</td>    
                             <td>{{ item.id }}</td>
                             <td>{{ item.description }}</td>
                             <td>{{ item.is_active|yesno:"Yes,No" }}</td>
