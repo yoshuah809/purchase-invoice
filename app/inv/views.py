@@ -64,3 +64,17 @@ class NewSubCategory(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         return super().form_valid(form)    
+
+
+
+class EditSubCategory(LoginRequiredMixin, generic.UpdateView):
+    model=SubCategory
+    template_name = 'inv/subcategory_form.html'
+    context_object_name='obj'
+    form_class=SubCategoryForm
+    success_url=reverse_lazy("inv:subcategory_list")
+    login_url='bases:login'
+
+    def form_valid(self, form):
+        form.instance.modified_by = self.request.user.id
+        return super().form_valid(form)
