@@ -172,20 +172,20 @@ class EditUnit(LoginRequiredMixin, generic.UpdateView):
         return super().form_valid(form)   
 
 
-# def deactivate_unit(request, id):
-#     unit = Brand.objects.filter(pk=id).first()
-#     context={}
-#     template_name='inv/delete_catalog.html'
+def deactivate_unit(request, id):
+    unit = Unit.objects.filter(pk=id).first()
+    context={}
+    template_name='inv/delete_catalog.html'
 
-#     if not unit:
-#         return redirect('inv:unit_list')
+    if not unit:
+        return redirect('inv:unit_list')
 
-#     if request.method == 'GET':
-#         context = {'obj': unit }
+    if request.method == 'GET':
+        context = {'obj': unit }
 
-#     if request.method == 'POST':
-#         unit.is_active = False
-#         unit.save()
-#         return redirect("inv:unit_list")    
+    if request.method == 'POST':
+        unit.is_active = False
+        unit.save()
+        return redirect("inv:unit_list")    
 
-#     return render(request, template_name, context) 
+    return render(request, template_name, context) 
