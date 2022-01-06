@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 from .models import Brand, Category, SubCategory
 from .forms import BrandForm, CategoryForm, SubCategoryForm
@@ -118,3 +118,22 @@ class EditBrand(LoginRequiredMixin, generic.UpdateView):
     def form_valid(self, form):
         form.instance.modified_by = self.request.user.id
         return super().form_valid(form)    
+
+
+def deactivate_brand(request, id):
+    brand = Brand.objects.filter(pk=id).first()
+    context={}
+    template_name='inv/delete_catalog.html'
+
+    if not brand:
+        return redirect('inv:brand_list')
+
+    if request.method == 'GET':
+        context = {'obj': brand }
+
+    if request.method == 'POST':
+        brand.is_active = False
+        brand.save()
+        return redirect("inv:brand_list")    
+
+    return render(request, template_name, context)    
