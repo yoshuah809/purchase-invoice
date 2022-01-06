@@ -7,7 +7,7 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model=Category
         fields = ['description', 'is_active']
-        labels = {'description': "Category description", "is_active":"is_active"}
+        labels = {'description': "Category description", "is_active":"Active"}
         widget={'description': forms.TextInput}
 
         def __init__(self, *args, **kwargs):

@@ -1,6 +1,6 @@
 from django.db import models
 
-from base.models import ModelClass
+from bases.models import ModelClass
 # Create your models here.
 
 class Category(ModelClass):

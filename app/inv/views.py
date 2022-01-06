@@ -38,3 +38,9 @@ class EditCategory(LoginRequiredMixin, generic.UpdateView):
     def form_valid(self, form):
         form.instance.modified_by = self.request.user.id
         return super().form_valid(form)
+
+class DeleteCategory(LoginRequiredMixin, generic.DeleteView):
+    model=Category
+    template_name = 'inv/delete_category.html'
+    context_object_name='obj'
+    success_url=reverse_lazy("inv:category_list")
