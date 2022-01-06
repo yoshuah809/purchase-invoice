@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Brand, Category, SubCategory
+from .models import Brand, Category, SubCategory, Unit
 
 
 class CategoryForm(forms.ModelForm):
@@ -48,3 +48,19 @@ class BrandForm(forms.ModelForm):
                 self.fields[field].widget.attrs.update ({
                     'class': 'form-control'
                 })
+
+
+
+class UnitForm(forms.ModelForm):
+    class Meta:
+        model=Unit
+        fields = ['description', 'is_active']
+        labels = {'description': "Unit description", "is_active":"Active"}
+        widget={'description': forms.TextInput}
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            for field in iter(self.fields):
+                self.fields[field].widget.attrs.update ({
+                    'class': 'form-control'
+                })                

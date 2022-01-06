@@ -38,3 +38,14 @@ class Brand(ModelClass):
     def save(self):
        self.description = self.description.upper()    
        super(Brand, self).save()   
+
+
+class Unit(ModelClass):
+    description =models.CharField(max_length=100, help_text='Unit Description', unique = True)
+
+    def __str__(self):
+       return '{}'.format(self.description)
+
+    def save(self):
+       self.description = self.description.upper()    
+       super(Unit, self).save()  

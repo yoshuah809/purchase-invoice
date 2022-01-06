@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import generic
-from .models import Brand, Category, SubCategory
-from .forms import BrandForm, CategoryForm, SubCategoryForm
+from .models import Brand, Category, SubCategory, Unit
+from .forms import BrandForm, CategoryForm, SubCategoryForm, UnitForm
 from django.urls import reverse_lazy
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -137,3 +137,55 @@ def deactivate_brand(request, id):
         return redirect("inv:brand_list")    
 
     return render(request, template_name, context)    
+
+
+class UnitView(LoginRequiredMixin, generic.ListView):
+    model = Unit
+    template_name = "inv/unit_list.html"
+    context_object_name= "obj"
+    login_url='bases:login' 
+
+
+class NewUnit(LoginRequiredMixin, generic.CreateView):
+    model=Unit
+    template_name = 'inv/unit_form.html'
+    context_object_name='obj'
+    form_class=UnitForm
+    success_url=reverse_lazy("inv:unit_list")
+    login_url='bases:login'
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
+
+class EditUnit(LoginRequiredMixin, generic.UpdateView):
+    model=Unit
+    template_name = 'inv/unit_form.html'
+    context_object_name='obj'
+    form_class=UnitForm
+    success_url=reverse_lazy("inv:unit_list")
+    login_url='bases:login'
+
+    def form_valid(self, form):
+        form.instance.modified_by = self.request.user.id
+        return super().form_valid(form)   
+
+
+# def deactivate_unit(request, id):
+#     unit = Brand.objects.filter(pk=id).first()
+#     context={}
+#     template_name='inv/delete_catalog.html'
+
+#     if not unit:
+#         return redirect('inv:unit_list')
+
+#     if request.method == 'GET':
+#         context = {'obj': unit }
+
+#     if request.method == 'POST':
+#         unit.is_active = False
+#         unit.save()
+#         return redirect("inv:unit_list")    
+
+#     return render(request, template_name, context) 

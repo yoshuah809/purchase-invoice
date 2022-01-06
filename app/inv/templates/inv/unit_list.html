@@ -3,13 +3,12 @@
 {% block page_content %}
 
 
-
     <!-- Dropdown Card Example -->
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div
             class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Sub-Category List</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Brand List</h6>
             <div class="dropdown no-arrow">
                 <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -18,19 +17,20 @@
                 <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                     aria-labelledby="dropdownMenuLink">
                     <div class="dropdown-header">Actions:</div>
-                    <a class="dropdown-item" href="{% url 'inv:new_subcategory' %}"><i class='far fa-calendar-plus'></i> New </a>
-                   
+                    <a class="dropdown-item" href="{% url 'inv:new_unit' %}"><i class='far fa-calendar-plus'></i> New </a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </div>
         </div>
         <!-- Card Body -->
         <div class="card-body">
             {% if not obj %}
-                <div class=" alert alert-info"> There is no Sub Categories</div>
+                <div class=" alert alert-info"> There is no Units</div>
             {% else %}    
                 <table class="table table-active table-hover"> 
                     <thead>
-                    <th>Category</th>
                     <th>ID</th>
                     <th>Description</th>
                     <th>Active</th>
@@ -42,15 +42,14 @@
                     <tbody>
                         {% for item in obj %}
                         </tr>
-                            <td>{{ item.category }}</td>    
                             <td>{{ item.id }}</td>
                             <td>{{ item.description }}</td>
                             <td>{{ item.is_active|yesno:"Yes,No" }}</td>
                             <td>{{ item.date_created|date:"m/d/Y H:i:s" }}</td>
                             <td>{{ item.date_modified }}</td>
                             <td >
-                                <a href="{% url 'inv:edit_subcategory' item.id %}" class="btn btn-warning btn-circle" role="button"><i class="far fa-edit"></i> </a>
-                                <a href="{% url 'inv:delete_catalog' item.id %}" class="btn btn-danger btn-circle" role="button"><i class="far fa-trash-alt"></i> </a>
+                                <a href="{% url 'inv:edit_unit' item.id %}" class="btn btn-warning btn-circle" role="button"><i class="far fa-edit"></i> </a>
+                                <a href="{% url 'inv:deactivate_brand' item.id %}" class="btn btn-danger btn-circle" role="button"><i class="far fa-thumbs-down"></i> </a>
                             </td>
                         <tr>
                         {% endfor %}
