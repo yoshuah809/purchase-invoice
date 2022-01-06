@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import generic
-from .models import Category, SubCategory
-from .forms import CategoryForm, SubCategoryForm
+from .models import Brand, Category, SubCategory
+from .forms import BrandForm, CategoryForm, SubCategoryForm
 from django.urls import reverse_lazy
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -85,3 +85,36 @@ class DeleteSubCategory(LoginRequiredMixin, generic.DeleteView):
     template_name = 'inv/delete_category.html'
     context_object_name='obj'
     success_url=reverse_lazy("inv:subcategory_list")
+
+
+
+class BrandView(LoginRequiredMixin, generic.ListView):
+    model = Brand
+    template_name = "inv/brand_list.html"
+    context_object_name= "obj"
+    login_url='bases:login'    
+
+class NewBrand(LoginRequiredMixin, generic.CreateView):
+    model=Brand
+    template_name = 'inv/brand_form.html'
+    context_object_name='obj'
+    form_class=BrandForm
+    success_url=reverse_lazy("inv:brand_list")
+    login_url='bases:login'
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
+
+class EditBrand(LoginRequiredMixin, generic.UpdateView):
+    model=Brand
+    template_name = 'inv/brand_form.html'
+    context_object_name='obj'
+    form_class=BrandForm
+    success_url=reverse_lazy("inv:brand_list")
+    login_url='bases:login'
+
+    def form_valid(self, form):
+        form.instance.modified_by = self.request.user.id
+        return super().form_valid(form)    

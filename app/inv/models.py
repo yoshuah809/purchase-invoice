@@ -27,3 +27,14 @@ class SubCategory(ModelClass):
 
     class Meta:
         unique_together = ('category', 'description')
+
+
+class Brand(ModelClass):
+    description =models.CharField(max_length=100, help_text='Brand Description', unique = True)
+
+    def __str__(self):
+       return '{}'.format(self.description)
+
+    def save(self):
+       self.description = self.description.upper()    
+       super(Brand, self).save()   

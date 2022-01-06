@@ -1,0 +1,58 @@
+{% extends 'base/home.html' %}
+
+{% block page_content %}
+<form method="POST" class="form-inline">
+    {% csrf_token %}
+    <div class="col-xl-6 col-md-6 mb-6">
+
+        {% if obj %}
+        <div class="card border-left-warning shadow h-100 py-2">
+        {% else %}
+        <div class="card border-left-success shadow h-100 py-2">
+        {% endif %}
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            {% if obj %} Edit  {% else %} New  {% endif %} Brand</div>
+                        </div>
+
+                        <!-- <div class="dropdown-divider"></div>
+                        <div class="row">
+                            <div class="col-10">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="description" required id ="id_description" value=" {% if obj %} {{obj.description}}  {% endif %}" maxlength="100">
+                                </div>
+                            </div> 
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label for="id_is_active">Active</label>
+                                    <input type="checkbox" name="is_active" class="form-control"  id ="id_is_active"  {% if obj.is_active %} checked {% endif %}>
+                                    {{" "}}    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                                </div>
+                            </div>   -->
+                            {{" "}}   
+                                {{ form.as_p }}
+                        </div>
+                        
+                        <div class="dropdown-divider"></div>
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" class="btn btn-danger" ><span class="fa fa-save">Save</span></button> 
+                                &nbsp;&nbsp; {{" "}}
+                                <a href="{% url 'inv:brand_list' %}" class="btn btn-success"><span class="fa fa-undo">Cancel</span></a>
+
+                            </div>
+                        </div>     
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+                        
+
+{% endblock %}
+
+{% block js_page %}
+
+{% endblock %}
