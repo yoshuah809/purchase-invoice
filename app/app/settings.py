@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'bases',
     'app',
     'inv',
+    'purchase',
 
 
 ]

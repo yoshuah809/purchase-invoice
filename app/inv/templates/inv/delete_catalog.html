@@ -4,15 +4,15 @@
 <form method="POST" class="form-inline">
     {% csrf_token %}
    
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-6 col-md-6 mb-6">
         <div class="card border-left-danger shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                           Delete ? {{ obj.description }}}</div>
+                           Do you want to Delete  or inactivate  {{ obj.description }} ?
                         <button type="submit" class="btn btn-danger"> <i class="far fa-question-circle"></i>Yes, Delete</button>
-                        <!-- <a href="{% url 'inv:category_list' %}" class="btn btn-success"><span class="fa fa-undo">Cancel</span></a> -->
+                        
                         <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-success"><span class="fa fa-undo">Cancel</span></a>
                     </div>
                     <div class="col-auto">
