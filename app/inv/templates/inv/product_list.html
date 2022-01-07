@@ -18,7 +18,7 @@
                     aria-labelledby="dropdownMenuLink">
                     <div class="dropdown-header">Actions:</div>
                     <!-- <a class="dropdown-item" href="{% url 'inv:new_product' %}"><i class='far fa-calendar-plus'></i> New </a> -->
-                    <a class="dropdown-item" onclick=" return open_modal('{% url 'inv:new_product' %}')" href="#"><i class='far fa-calendar-plus'></i> New </a>
+                    <a class="dropdown-item" onclick="return open_modal('{% url 'inv:new_product' %}')" href="#"><i class='far fa-calendar-plus'></i> New </a>
                    
                 </div>
             </div>
@@ -57,8 +57,9 @@
                             <td>{{ item.subcategory }}</td>
                             <td>{{ item.unit }}</td>
                             <td >
-                                <a href="{% url 'inv:edit_unit' item.id %}" class="btn btn-warning btn-circle" role="button"><i class="far fa-edit"></i> </a>
-                                <a href="{% url 'inv:deactivate_unit' item.id %}" class="btn btn-danger btn-circle" role="button"><i class="far fa-thumbs-down"></i> </a>
+                                <!-- <a href="{% url 'inv:edit_unit' item.id %}" class="btn btn-warning btn-circle" role="button"><i class="far fa-edit"></i> </a> -->
+                                <button class="btn btn-warning btn-circle" onclick="return open_modal('{% url 'inv:edit_product' item.id %}')"  role="button"><i class="far fa-edit"></i> </button>
+                                <a href="{% url 'inv:deactivate_product' item.id %}" class="btn btn-danger btn-circle" role="button"><i class="far fa-thumbs-down"></i> </a>
                             </td>
                         <tr>
                         {% endfor %}

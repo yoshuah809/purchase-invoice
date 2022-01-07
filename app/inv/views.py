@@ -209,3 +209,35 @@ class NewProduct(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         return super().form_valid(form)    
+
+
+class EditProduct(LoginRequiredMixin, generic.UpdateView):
+    model=Product
+    template_name = 'inv/product_form.html'
+    context_object_name='obj'
+    form_class=ProductForm
+    success_url=reverse_lazy("inv:product_list")
+    login_url='bases:login'
+
+    def form_valid(self, form):
+        form.instance.modified_by = self.request.user.id
+        return super().form_valid(form)  
+
+
+def deactivate_product(request, id):
+    product = Product.objects.filter(pk=id).first()
+    context={}
+    template_name='inv/delete_catalog.html'
+
+    if not product:
+        return redirect('inv:product_list')
+
+    if request.method == 'GET':
+        context = {'obj': product }
+
+    if request.method == 'POST':
+        product.is_active = False
+        product.save()
+        return redirect("inv:product_list")    
+
+    return render(request, template_name, context)         
