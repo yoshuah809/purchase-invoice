@@ -67,7 +67,7 @@ class UnitForm(forms.ModelForm):
 
 class ProductForm(forms.ModelForm):
     subcategory= forms.ModelChoiceField(
-        queryset=Category.objects.filter(is_active=True).order_by('description'), empty_label= 'Select Category'
+        queryset=SubCategory.objects.filter(is_active=True).order_by('description'), empty_label= 'Select Category'
     )
     brand= forms.ModelChoiceField(queryset=Brand.objects.filter(is_active=True).order_by('description'),empty_label= 'Select Brand')
     class Meta:

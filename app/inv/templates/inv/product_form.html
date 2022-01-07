@@ -31,7 +31,8 @@
                                     <div class="col">
                                         <button type="submit" class="btn btn-danger" ><span class="fa fa-save">Save</span></button> 
                                         &nbsp;&nbsp; {{" "}}
-                                        <a href="{% url 'inv:product_list' %}" class="btn btn-success"><span class="fa fa-undo">Cancel</span></a>
+                                        <!-- <a href="{% url 'inv:product_list' %}" class="btn btn-success"><span class="fa fa-undo">Cancel</span></a> -->
+                                        <button class="btn btn-success" type="button" onclick="return close_modal()">Cancel</button>
         
                                     </div>
                                 </div>     

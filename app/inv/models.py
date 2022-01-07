@@ -19,7 +19,7 @@ class SubCategory(ModelClass):
     description = models.CharField(max_length=100, help_text='Category Description')
 
     def __str__(self):
-       return '{}:{}'.format(self.category.description, self.description)
+       return '{}:{}'.format(self.category.description,self.description)
 
     def save(self):
         self.description = self.description.upper()    
