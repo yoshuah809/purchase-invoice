@@ -49,3 +49,26 @@ class Unit(ModelClass):
     def save(self):
        self.description = self.description.upper()    
        super(Unit, self).save()  
+
+
+class Product(ModelClass):
+    code =models.CharField(max_length=20, unique = True)       
+    bar_code = models.CharField(max_length=50)
+    description = models.CharField(max_length=200)
+    price = models.FloatField(default=0)
+    in_stock = models.IntegerField(default=0)
+    last_purchased = models.DateField(null=True, blank=True)
+    
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
+    subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
+
+    def __str__(self):
+      return '{}'.format(self.description)
+
+    def save(self):
+      self.description = self.description.upper()    
+      super(Product, self).save()    
+
+    class Meta:
+       unique_together = ('code', 'bar_code')  

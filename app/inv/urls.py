@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import BrandView, CategoryView, DeleteSubCategory, EditCategory, EditSubCategory, NewBrand, NewCategory, DeleteCategory, NewSubCategory, SubCategoryView, EditBrand, UnitView, deactivate_brand, NewUnit, EditUnit, deactivate_unit
+from .views import BrandView, CategoryView, DeleteSubCategory, EditCategory, EditSubCategory, NewBrand, NewCategory, DeleteCategory, NewProduct, NewSubCategory, ProductsView, SubCategoryView, EditBrand, UnitView, deactivate_brand, NewUnit, EditUnit, deactivate_unit
 
 urlpatterns = [
 
@@ -26,5 +26,7 @@ urlpatterns = [
 
     path('units/deactivate/<int:id>', deactivate_unit, name='deactivate_unit'),
 
+    path('products/', ProductsView.as_view(), name='product_list'),
+    path('products/new', NewProduct.as_view(), name='new_product'),
 
 ]
