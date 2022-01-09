@@ -5,11 +5,12 @@ from .forms import BrandForm, CategoryForm, ProductForm, SubCategoryForm, UnitFo
 from django.urls import reverse_lazy
 from django.contrib import messages
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 # Create your views here.
 
-class CategoryView(LoginRequiredMixin, generic.ListView):
+class CategoryView(LoginRequiredMixin, PermissionRequiredMixin,generic.ListView):
+    permission_required='inv.view_category'
     model = Category
     template_name = "inv/category_list.html"
     context_object_name= "obj"
@@ -50,7 +51,8 @@ class DeleteCategory(LoginRequiredMixin, generic.DeleteView):
     success_url=reverse_lazy("inv:category_list")
 
 
-class SubCategoryView(LoginRequiredMixin, generic.ListView):
+class SubCategoryView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
+    permission_required='inv.view_subcategory'
     model = SubCategory
     template_name = "inv/subcategory_list.html"
     context_object_name= "obj"
