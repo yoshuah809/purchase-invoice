@@ -51,7 +51,7 @@ def deactivate_provider(request, id):
     template_name='purchase/deactivate_provider.html'
 
     if not provider:
-        return HttpResponse('Provider does not exist' +str(id))
+        return HttpResponse('Provider does not exist' + '  ' + str(id))
 
     if request.method == 'GET':
         context = {'obj': provider }

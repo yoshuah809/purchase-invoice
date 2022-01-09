@@ -52,23 +52,25 @@
 										<h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
 
 										<small class="text danger">
-											{% if form.errors %}
-												{% for field in form %}
-													{% if field.errors %}
-														{% for error in field.errors %}
-															{{ error|escape }}
-														{% endfor %}
-													{% endif %}
-												{% endfor %}
 											
-												{% if form.non_field.errors %}
-													{% for field in form.non_field_errors %}
-														{% if form.non_field_errors %}
-															{{ error|escape }}
-														{% endif %}
+											{% if form.errors %}
+											{% for field in form %}
+												{% if field.errors %}
+													{% for error in field.errors %}
+														{{ error|escape }}
 													{% endfor %}
 												{% endif %}
-											{% endif %}	
+											{% endfor %}
+										
+											{% if form.non_field.errors %}
+												{% for field in form.non_field_errors %}
+													{% if form.non_field_errors %}
+														{{ error|escape }}
+													{% endif %}
+												{% endfor %}
+											{% endif %}
+										{% endif %}	
+											
 										</small>
 									</div>
 									<form class="user" method="POST">
@@ -108,5 +110,31 @@
 </body>
 
 </html>
+
+
+{% block js_page %}
+	<script>
+
+		{% if form.errors %}
+			{% for field in form %}
+				{% if field.errors %}
+					{% for error in field.errors %}
+						
+						message( '{{ error|escape }}','red' );
+					{% endfor %}
+				{% endif %}
+			{% endfor %}
+
+			{% if form.non_field.errors %}
+				{% for field in form.non_field_errors %}
+					{% if form.non_field_errors %}
+					message( '{{ error|escape }}','red' );
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		{% endif %}	
+	</script>
+{% endblock js_page %}
+
 
 {% endblock %}

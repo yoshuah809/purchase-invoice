@@ -48,6 +48,7 @@ $(document).ready(function() {
 
         var id = {{ obj.id }};
         var template="{% url 'purchase:deactivate_provider' obj.id %}";
+        //template += id;
         var data={"id":id};
         data = JSON.stringify(data);
 
@@ -62,10 +63,13 @@ $(document).ready(function() {
             success: function(response){
                 console.log(response)
                 close_modal();
-                alert(response)
+                //alert(response)
+                const type=(response.startsWith('Provider does not exist') ? 'red' : 'green');
+                message(response, type );
             },
             error: function(jqXHR, tetxStatus, errorThrow){
                 console.log(tetxStatus, errorThrow)
+                message(errorThrow,'green' );
                 close_modal();
             }
         }) 

@@ -3,8 +3,10 @@ from django.views import generic
 from .models import Brand, Category, Product, SubCategory, Unit
 from .forms import BrandForm, CategoryForm, ProductForm, SubCategoryForm, UnitForm
 from django.urls import reverse_lazy
+from django.contrib import messages
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 # Create your views here.
 
 class CategoryView(LoginRequiredMixin, generic.ListView):
@@ -14,26 +16,28 @@ class CategoryView(LoginRequiredMixin, generic.ListView):
     login_url='bases:login'
 
 
-class NewCategory(LoginRequiredMixin, generic.CreateView):
+class NewCategory(SuccessMessageMixin, LoginRequiredMixin, generic.CreateView):
     model=Category
     template_name = 'inv/category_form.html'
     context_object_name='obj'
     form_class=CategoryForm
     success_url=reverse_lazy("inv:category_list")
     login_url='bases:login'
+    success_message='The Category was successfully created'
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
 
 
-class EditCategory(LoginRequiredMixin, generic.UpdateView):
+class EditCategory(SuccessMessageMixin,LoginRequiredMixin, generic.UpdateView):
     model=Category
     template_name = 'inv/category_form.html'
     context_object_name='obj'
     form_class=CategoryForm
     success_url=reverse_lazy("inv:category_list")
     login_url='bases:login'
+    success_message="The Category was successfully updated"
 
     def form_valid(self, form):
         form.instance.modified_by = self.request.user.id
@@ -134,6 +138,7 @@ def deactivate_brand(request, id):
     if request.method == 'POST':
         brand.is_active = False
         brand.save()
+        messages.success(request, 'Brand has been deactivated')
         return redirect("inv:brand_list")    
 
     return render(request, template_name, context)    
