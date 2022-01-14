@@ -1,14 +1,17 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.forms.fields import DateTimeField
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import generic
 
 from django.urls import reverse_lazy
 from bases.views import NoProvileges
-from purchase.forms import ProviderForm
+from purchase.forms import ProviderForm, PurchaseHeaderForm
 
-from purchase.models import Provider
+from purchase.models import Provider, PurchaseDetail, PurchaseHeader
+
+from inv.models import Product
 
 
 # Create your views here.
@@ -68,3 +71,114 @@ def deactivate_provider(request, id):
         return HttpResponse("Provider has been deactivated")    
 
     return render(request, template_name, context)   
+
+
+class PurchaseView(NoProvileges, generic.ListView):
+    permission_required='inv.view_purchase_header'
+    model = PurchaseHeader
+    template_name = "purchase/purchase_list.html"
+    context_object_name= "obj" 
+
+
+
+@login_required(login_url='/login/')
+@permission_required('cmp.view_PurchaseHeader', login_url='bases:sin_privilegios')
+def purchase(request,purchase_id=None):
+    template_name="purchase/purchase.html"
+    prod=Product.objects.filter(is_active=True)
+    purchase_form={}
+    context={}
+
+    if request.method=='GET':
+        purchase_form=PurchaseHeaderForm()
+        header = PurchaseHeader.objects.filter(pk=purchase_id).first()
+
+        if header:
+            detail = PurchaseDetail.objects.filter(purchase=header)
+            purchase_date = DateTimeField.date.isoformat(header.invoice_date)
+            invoice_date = DateTimeField.date.isoformat(header.purchase_date)
+            e = {
+                'purchase_date':purchase_date,
+                'provider': header.provider,
+                'observation': header.observation,
+                'invoice_no': header.invoice_no,
+                'invoice_date': invoice_date,
+                'sub_total': header.sub_total,
+                'discount': header.discount,
+                'total':header.total
+            }
+            purchase_form = PurchaseHeaderForm(e)
+        else:
+            detail=None
+        
+        context={'product':prod,'header':header,'detail':detail,'header_form':purchase_form}
+
+    if request.method=='POST':
+        purchase_date = request.POST.get("purchase_date")
+        observation = request.POST.get("observation")
+        invoice_no = request.POST.get("invoice_no")
+        invoice_date = request.POST.get("invoice_date")
+        provider = request.POST.get("provider")
+        sub_total = 0
+        discount = 0
+        total = 0
+
+        if not purchase_id:
+            prov=Provider.objects.get(pk=provider)
+
+            header = header(
+                purchase_date=purchase_date,
+                observation=observation,
+                invoice_no=invoice_no,
+                invoice_date=invoice_date,
+                provider=provider,
+                created_by = request.user 
+            )
+            if header:
+                header.save()
+                purchase_id=header.id
+        else:
+            header=PurchaseHeader.objects.filter(pk=purchase_id).first()
+            if header:
+                header.purchase_date = purchase_date
+                header.observation = observation
+                header.invoice_no=invoice_no
+                header.invoice_date=invoice_date
+                header.modified_by=request.user.id
+                header.save()
+
+        if not purchase_id:
+            return redirect("cmp:compras_list")
+        
+        product = request.POST.get("id_id_producto")
+        quantity = request.POST.get("id_cantidad_detalle")
+        price = request.POST.get("id_precio_detalle")
+        sub_total_detail = request.POST.get("id_sub_total_detail")
+        discount_detalle  = request.POST.get("id_discount_detalle")
+        total_detail  = request.POST.get("id_total_detail")
+
+        prod = Product.objects.get(pk=Product)
+
+        det = PurchaseDetail(
+            purchase=header,
+            Product=prod,
+            quantity=quantity,
+            provider_price=price,
+            discount=discount_detalle,
+            cost=0,
+            created_by = request.user
+        )
+
+        if det:
+            det.save()
+
+            sub_total=PurchaseDetail.objects.filter(purchase=purchase_id).aggregate(Smodified_by('sub_total'))
+            discount=PurchaseDetail.objects.filter(purchase=purchase_id).aggregate(Smodified_by('discount'))
+            header.sub_total = sub_total["sub_total__smodified_by"]
+            header.discount=discount["discount__smodified_by"]
+            header.save()
+
+        return redirect("cmp:compras_edit",purchase_id=purchase_id)
+
+
+    return render(request, template_name, context)

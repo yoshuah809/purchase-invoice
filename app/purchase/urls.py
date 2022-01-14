@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import EditProvider, NewProvider, ProviderView, deactivate_provider
+from .views import EditProvider, NewProvider, ProviderView, PurchaseView, deactivate_provider
 
 urlpatterns = [
 
@@ -10,5 +10,5 @@ urlpatterns = [
         
     path('providers/deactivate/<int:id>', deactivate_provider, name='deactivate_provider'),
   
-
+    path('purchase/', PurchaseView.as_view(), name='purchase_list'),
 ]
