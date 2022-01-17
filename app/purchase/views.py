@@ -1,9 +1,11 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models.aggregates import Sum
 from django.forms.fields import DateTimeField
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import generic
+import datetime
 
 from django.urls import reverse_lazy
 from bases.views import NoProvileges
@@ -82,7 +84,7 @@ class PurchaseView(NoProvileges, generic.ListView):
 
 
 @login_required(login_url='/login/')
-@permission_required('cmp.view_PurchaseHeader', login_url='bases:sin_privilegios')
+@permission_required('purchase.view_PurchaseHeader', login_url='bases:no_privileges')
 def purchase(request,purchase_id=None):
     template_name="purchase/purchase.html"
     prod=Product.objects.filter(is_active=True)
@@ -95,8 +97,8 @@ def purchase(request,purchase_id=None):
 
         if header:
             detail = PurchaseDetail.objects.filter(purchase=header)
-            purchase_date = DateTimeField.date.isoformat(header.invoice_date)
-            invoice_date = DateTimeField.date.isoformat(header.purchase_date)
+            purchase_date = datetime.date.isoformat(header.invoice_date)
+            invoice_date = datetime.date.isoformat(header.purchase_date)
             e = {
                 'purchase_date':purchase_date,
                 'provider': header.provider,
@@ -111,7 +113,7 @@ def purchase(request,purchase_id=None):
         else:
             detail=None
         
-        context={'product':prod,'header':header,'detail':detail,'header_form':purchase_form}
+        context={'products':prod,'header':header,'detail':detail,'header_form':purchase_form}
 
     if request.method=='POST':
         purchase_date = request.POST.get("purchase_date")
@@ -126,12 +128,12 @@ def purchase(request,purchase_id=None):
         if not purchase_id:
             prov=Provider.objects.get(pk=provider)
 
-            header = header(
+            header = PurchaseHeader(
                 purchase_date=purchase_date,
                 observation=observation,
                 invoice_no=invoice_no,
                 invoice_date=invoice_date,
-                provider=provider,
+                provider=prov,
                 created_by = request.user 
             )
             if header:
@@ -140,45 +142,45 @@ def purchase(request,purchase_id=None):
         else:
             header=PurchaseHeader.objects.filter(pk=purchase_id).first()
             if header:
-                header.purchase_date = purchase_date
-                header.observation = observation
+                header.purchase_date=purchase_date
+                header.observation=observation
                 header.invoice_no=invoice_no
                 header.invoice_date=invoice_date
                 header.modified_by=request.user.id
                 header.save()
 
         if not purchase_id:
-            return redirect("cmp:compras_list")
+            return redirect("purchase:purchase_list")
         
-        product = request.POST.get("id_id_producto")
-        quantity = request.POST.get("id_cantidad_detalle")
-        price = request.POST.get("id_precio_detalle")
+        product = request.POST.get("id_id_product")
+        quantity = request.POST.get("id_quantity_detail")
+        price = request.POST.get("id_price_detail")
         sub_total_detail = request.POST.get("id_sub_total_detail")
-        discount_detalle  = request.POST.get("id_discount_detalle")
+        discount_detail  = request.POST.get("id_discount_detail")
         total_detail  = request.POST.get("id_total_detail")
 
-        prod = Product.objects.get(pk=Product)
+        prod = Product.objects.get(pk=product)
 
-        det = PurchaseDetail(
+        detail = PurchaseDetail(
             purchase=header,
-            Product=prod,
+            product=prod,
             quantity=quantity,
             provider_price=price,
-            discount=discount_detalle,
+            discount=discount_detail,
             cost=0,
             created_by = request.user
         )
 
-        if det:
-            det.save()
+        if detail:
+            detail.save()
 
-            sub_total=PurchaseDetail.objects.filter(purchase=purchase_id).aggregate(Smodified_by('sub_total'))
-            discount=PurchaseDetail.objects.filter(purchase=purchase_id).aggregate(Smodified_by('discount'))
-            header.sub_total = sub_total["sub_total__smodified_by"]
-            header.discount=discount["discount__smodified_by"]
+            sub_total=PurchaseDetail.objects.filter(purchase=purchase_id).aggregate(Sum('sub_total'))
+            discount=PurchaseDetail.objects.filter(purchase=purchase_id).aggregate(Sum('discount'))
+            header.sub_total = sub_total["sub_total__sum"]
+            header.discount=discount["discount__sum"]
             header.save()
 
-        return redirect("cmp:compras_edit",purchase_id=purchase_id)
+        return redirect("purchase:edit_purchase",purchase_id=purchase_id)
 
 
     return render(request, template_name, context)
